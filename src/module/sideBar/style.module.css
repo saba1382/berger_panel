@@ -1,0 +1,15 @@
+.menu :global(.ant-menu-title-content) {
+    font-weight: 700;
+}
+
+.menu :global(.ant-menu-item-selected){
+    color: #5cd039;
+    background-color: #ebfce6;
+    width: 100%;
+}
+
+.menu :global(.ant-menu-item:hover) {
+    color: #5cd039 !important;
+    background-color: #ebfce6 !important;
+    width: 100% !important;
+}

@@ -1,0 +1,85 @@
+.products {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.products .product {
+    width: 200px;
+    height: 255px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    position: relative;
+}
+
+.products .add_product {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 255px;
+    border-radius: 10px;
+    border: 1px solid #80808063;
+}
+
+.products .product > img{
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    border-radius: 100%;
+    top: -15px;
+}
+
+.title{
+    margin-top: 70px;
+    font-size: 18px;
+    font-weight: 900;
+}
+.weight {
+    color: #808080b8;
+    font-weight: 500;
+}
+
+.about {
+    font-size: 12px;
+    font-weight: 600;
+    color: gray;
+}
+
+.footer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer > span {
+    font-family: system-ui;
+    font-weight: 600;
+}
+
+.footer > div {
+    display: flex;
+    gap: 10px;
+}
+
+.footer > div > .border {
+    border: 1px solid #80808061;
+    border-radius: 3px;
+    padding: 0px 5px;
+}
+
+.not_active {
+    color: #80808061;
+}
+
+.ingredient {
+    display: flex;
+    flex-wrap: wrap;
+}

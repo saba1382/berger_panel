@@ -1,0 +1,96 @@
+.new_product_btn {
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    font-weight: 700;
+    align-items: center;
+    justify-content: center;
+    color: gray;
+    cursor: pointer;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.form_box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+
+.form .labelInput {
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.form > .btn_submit {
+    background-color: black;
+    color: white;
+    height: 40px;
+    border-radius: 5px;
+    font-weight: 700;
+    position: absolute;
+    bottom: 20px;
+    width: 28rem;
+
+}
+
+.form_box > label{
+    flex-basis: 47%;
+}
+
+.form_box > .upload_image {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.form_box > .upload_image > .label{
+    display: flex;
+    flex-direction: column;
+}
+
+.form_box > .upload_image > .label > span:first-child{
+    font-weight: 700;
+}
+
+.form_box > .upload_image :global(.ant-btn) {
+    background-color: #eeeeee;
+    color: black;
+    font-weight: 500;
+    border-radius: 4px !important;
+}
+
+.form_box > .upload_image > .label > span:last-child{
+    color: #d5d2d2;
+    font-weight: 500;
+}
+
+:global(.ant-drawer .ant-drawer-header-title) {
+    flex-direction: row-reverse;
+}
+
+:global(.ant-input-affix-wrapper) {
+    border-radius: 0px !important;
+}
+
+:global(.ant-input) {
+    border-radius: 0px !important;
+}
+
+:global(.ant-checkbox-wrapper > span:last-child) {
+    font-weight: 500;
+}
+
+.input_tag {
+   height: 100px;
+   border: 1px solid #d9d9d9;
+   padding: 10px;
+}
