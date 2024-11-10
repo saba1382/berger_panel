@@ -1,48 +1,34 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import type { InputRef } from 'antd';
-import { Flex, Input, Tag, theme, Tooltip } from 'antd';
+import React, { FC, useEffect, useRef, useState } from "react";
+import { PlusOutlined } from "@ant-design/icons";
+import type { InputRef } from "antd";
+import { Flex, Input, Tag, theme, Tooltip } from "antd";
 
 const tagInputStyle: React.CSSProperties = {
   width: 64,
   height: 22,
   marginInlineEnd: 8,
-  verticalAlign: 'top',
+  verticalAlign: "top",
 };
 
 type IProps = {
-  ingredients:any
-}
+  ingredients: any;
+  clearTages: boolean;
+};
 
-
-const InputTag: FC<IProps> = props => {
-
-  const { ingredients }  = props
+const InputTag: FC<IProps> = (props) => {
+  const { ingredients, clearTages } = props;
 
   const { token } = theme.useToken();
   const [tags, setTags] = useState<string[]>([]);
   const [inputVisible, setInputVisible] = useState(false);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [editInputIndex, setEditInputIndex] = useState(-1);
-  const [editInputValue, setEditInputValue] = useState('');
+  const [editInputValue, setEditInputValue] = useState("");
   const inputRef = useRef<InputRef>(null);
   const editInputRef = useRef<InputRef>(null);
 
-  ingredients(tags)
-
-  useEffect(() => {
-    if (inputVisible) {
-      inputRef.current?.focus();
-    }
-  }, [inputVisible]);
-
-  useEffect(() => {
-    editInputRef.current?.focus();
-  }, [editInputValue]);
-
   const handleClose = (removedTag: string) => {
     const newTags = tags.filter((tag) => tag !== removedTag);
-    console.log(newTags);
     setTags(newTags);
   };
 
@@ -59,7 +45,7 @@ const InputTag: FC<IProps> = props => {
       setTags([...tags, inputValue]);
     }
     setInputVisible(false);
-    setInputValue('');
+    setInputValue("");
   };
 
   const handleEditInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,14 +57,30 @@ const InputTag: FC<IProps> = props => {
     newTags[editInputIndex] = editInputValue;
     setTags(newTags);
     setEditInputIndex(-1);
-    setEditInputValue('');
+    setEditInputValue("");
   };
 
   const tagPlusStyle: React.CSSProperties = {
     height: 22,
     background: token.colorBgContainer,
-    borderStyle: 'dashed',
+    borderStyle: "dashed",
   };
+
+  useEffect(() => {
+    setTags([]);
+  }, [clearTages]);
+
+  useEffect(() => {
+    if (inputVisible) {
+      inputRef.current?.focus();
+    }
+    ingredients(tags);
+  }, [inputVisible]);
+
+  useEffect(() => {
+    editInputRef.current?.focus();
+    ingredients(tags);
+  }, [editInputValue]);
 
   return (
     <Flex gap="4px 0" wrap>
@@ -102,15 +104,15 @@ const InputTag: FC<IProps> = props => {
           <Tag
             key={tag}
             closable={index !== 0}
-            style={{ userSelect: 'none' }}
+            style={{ userSelect: "none" }}
             onClose={() => handleClose(tag)}
           >
             <span
               onDoubleClick={(e) => {
                 // if (index !== 0) {
-                  setEditInputIndex(index);
-                  setEditInputValue(tag);
-                  e.preventDefault();
+                setEditInputIndex(index);
+                setEditInputValue(tag);
+                e.preventDefault();
                 // }
               }}
             >

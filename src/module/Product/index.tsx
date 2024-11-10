@@ -13,11 +13,12 @@ type IProps = {
 const Product: FC<IProps> = props => {
 
     const [newProduct, setNewProduct] = useState<product>();
-    const [productId, setProductId] = useState<string | number | null>(null)
-    const [showModal, setShowModal] = useState<boolean>(false)
+    const [productId, setProductId] = useState<string | number | null>(null);
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [allProducts, setAllProducts] = useState<any>();
+
 
     const handleNewProduct = (product: product) => {
-        productList.push(product)
         setNewProduct(product)
     }
 
@@ -30,12 +31,25 @@ const Product: FC<IProps> = props => {
         setShowModal(closeModal)
     }
 
-    useEffect(() => {}, [newProduct])
+    useEffect(() => {
+        if (newProduct == null) return;
+        console.log('first pro', newProduct);
+        let data = [...allProducts, newProduct]
+        localStorage.setItem('products', JSON.stringify(data));
+        setAllProducts(data)
+    }, [newProduct])
+
+    useEffect(() => {
+        const product = localStorage.getItem('products')
+        const localData = product ? JSON.parse(product) : productList;
+        setAllProducts(localData)
+        console.log('first', localData)
+    }, [])
 
     return (
         <div className={styles.products}>
             {
-                productList.map((product:product) => (
+                allProducts && allProducts.map((product:product) => (
                     <div className={styles.product} key={product.id}>
                         <img src={product.icon} />
                         <span className={styles.title}>{product.title}</span>

@@ -26,7 +26,6 @@ const EditProduct: FC<IProps> = props => {
 
   useEffect(() => {
     setIsModalOpen(isOpenModal);
-    console.log('first id', productId);
   }, [isOpenModal])
 
   return (
