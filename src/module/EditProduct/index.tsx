@@ -1,16 +1,19 @@
 import { FC, useEffect, useState } from 'react';
-import { Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import styles from './styles.module.css'
+import { productList } from '../Product/MockData';
 
 type IProps = {
   isOpenModal: boolean;
   isCloseModal: Function;
-  productId: string | number | null
+  productId: string | number | null;
+  editMode: Function;
+  reloadAfterDelete: Function
 }
 
 const EditProduct: FC<IProps> = props => {
     
-  const { isOpenModal=false, isCloseModal, productId } = props
+  const { isOpenModal=false, isCloseModal, productId, editMode, reloadAfterDelete } = props
 
   const [isModalOpen, setIsModalOpen] = useState(isOpenModal);
 
@@ -24,6 +27,21 @@ const EditProduct: FC<IProps> = props => {
     isCloseModal(false)
   };
 
+  const deleteProduct = () => {
+    const product = localStorage.getItem('products')
+    const localData = product ? JSON.parse(product) : productList;
+    const afterDeleteProduct = localData.filter((product:any) => product.id !== productId);
+    localStorage.setItem('products', JSON.stringify(afterDeleteProduct))
+    reloadAfterDelete(afterDeleteProduct);
+    handleCancel();
+  }
+
+  const editProduct = () => {
+    localStorage.setItem('productId', JSON.stringify(productId))
+    editMode('Edit');
+    handleCancel()
+  }
+
   useEffect(() => {
     setIsModalOpen(isOpenModal);
   }, [isOpenModal])
@@ -32,11 +50,11 @@ const EditProduct: FC<IProps> = props => {
     
     <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
       <div>
-        به دلیل نبود طرح این بخش انجام نشده
+
         <br/>
         <br/>
-        <br/>
-        <p>Product Id: {productId}</p>
+        <Button type='primary' onClick={editProduct}>ویرایش محصول</Button>
+        <Button type='primary' danger onClick={deleteProduct}>حذف محصول</Button>
       </div>
     </Modal>
   

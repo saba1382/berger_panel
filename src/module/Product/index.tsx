@@ -16,6 +16,9 @@ const Product: FC<IProps> = props => {
     const [productId, setProductId] = useState<string | number | null>(null);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [allProducts, setAllProducts] = useState<any>();
+    const [productMode, setProductMode] = useState<any>();
+    const [reloadAfterEdit, setReloadAfterEdit] = useState<any>();
+    const [afterDelete, setAfterDelete] = useState<any>()
 
 
     const handleNewProduct = (product: product) => {
@@ -31,9 +34,38 @@ const Product: FC<IProps> = props => {
         setShowModal(closeModal)
     }
 
+    const handleCreateMode = () => {
+        setProductMode('create');
+    }
+
+    const handleEditMode = () => {
+        setProductMode(`Edit ${productId}`)
+    }
+
+    const onEditProduct = (e:any) => {
+        setReloadAfterEdit(e);
+    }
+
+    const reloadAfterDelete = (e:any) => {
+        setAfterDelete(e)
+    }
+
+    useEffect(() => {
+        if (!afterDelete) return;
+        const product = localStorage.getItem('products')
+        const localData = product ? JSON.parse(product) : productList;
+        setAllProducts(localData)
+    }, [afterDelete])
+
+    useEffect(() => {
+        if (!reloadAfterEdit) return;
+        const product = localStorage.getItem('products')
+        const localData = product ? JSON.parse(product) : productList;
+        setAllProducts(localData)
+    }, [reloadAfterEdit])
+
     useEffect(() => {
         if (newProduct == null) return;
-        console.log('first pro', newProduct);
         let data = [...allProducts, newProduct]
         localStorage.setItem('products', JSON.stringify(data));
         setAllProducts(data)
@@ -43,7 +75,6 @@ const Product: FC<IProps> = props => {
         const product = localStorage.getItem('products')
         const localData = product ? JSON.parse(product) : productList;
         setAllProducts(localData)
-        console.log('first', localData)
     }, [])
 
     return (
@@ -76,9 +107,9 @@ const Product: FC<IProps> = props => {
                 ))
             }
             <div className={styles.add_product}>
-                <Drower newProduct={handleNewProduct}/>
+                <Drower newProduct={handleNewProduct} productMode={productMode} createMode={handleCreateMode} editProduct={onEditProduct}/>
             </div>
-            <EditProduct isOpenModal={showModal} isCloseModal={handleClose} productId={productId}/>
+            <EditProduct isOpenModal={showModal} isCloseModal={handleClose} productId={productId} editMode={handleEditMode} reloadAfterDelete={reloadAfterDelete}/>
         </div>
     );
 };

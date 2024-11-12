@@ -1,16 +1,20 @@
 import { Button, Checkbox, Drawer, Input, Space, Upload } from "antd";
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { product } from "../../utils/ProductType";
 import InputTag from "./input";
 import { PlusOutlined, ToTopOutlined } from "@ant-design/icons";
 import styles from "./style.module.css";
+import { productList } from "../Product/MockData";
 
 type IProps = {
   newProduct: any;
+  productMode: any;
+  editProduct: Function;
+  createMode: Function;
 };
 
 const Drower: FC<IProps> = (props) => {
-  const { newProduct } = props;
+  const { newProduct, productMode, createMode, editProduct } = props;
   const inputRef = useRef<any>(null);
 
   const [open, setOpen] = useState(false);
@@ -28,6 +32,11 @@ const Drower: FC<IProps> = (props) => {
   const showDrawer = () => {
     setOpen(true);
   };
+
+  const onOpenDrower = () => {
+    createMode();
+    showDrawer()
+  }
 
   const onClose = () => {
     setOpen(false);
@@ -72,24 +81,75 @@ const Drower: FC<IProps> = (props) => {
     onClose();
   };
 
+  const putDataToForm = () => {
+    const id = localStorage.getItem('productId')
+    const products = localStorage.getItem('products')
+    const localData = products ? JSON.parse(products) : productList;
+    const product = localData.filter((product:any) => product.id === JSON.parse(id ?? ''))
+    showDrawer();
+    setFormData({
+      id: product[0].id,
+      icon: product[0].icon,
+      title: product[0].title,
+      weight: product[0].weight,
+      Ingredients: product[0].Ingredients,
+      price: product[0].price,
+      see: false,
+      setting: true,
+    });
+  }
+
+  const handleEditProduct = (e:any) => {
+    e.preventDefault();
+    const products = localStorage.getItem('products')
+    const localData = products ? JSON.parse(products) : productList;
+    const product = localData.findIndex((product:any) => product.id === formData.id);
+    const data = localData[product] = formData;
+    localStorage.setItem('products', JSON.stringify(localData));
+    onClose();
+    editProduct(localData)
+  }
+
+  useEffect(() => {
+    if (!productMode) return;
+    if (productMode.includes('Edit')) {
+      setTimeout(() => {
+        putDataToForm()
+      }, 500);
+      return;
+    }else {
+      setFormData({
+        id: Math.floor(Math.random() * 10000000),
+        icon: "",
+        title: "",
+        weight: 0,
+        Ingredients: [],
+        price: 0,
+        see: false,
+        setting: true,
+      });
+      return
+    }
+  }, [productMode])
+
   return (
     <div>
       <Space>
-        <div className={styles.new_product_btn} onClick={showDrawer}>
+        <div className={styles.new_product_btn} onClick={onOpenDrower}>
           <span>+</span>
           <span>Add new</span>
           <span>Product</span>
         </div>
       </Space>
       <Drawer
-        title="Add new product"
+        title={`${!productMode || productMode.includes('create') ? 'Add new' : 'Edit'} product`}
         placement={"right"}
         width={500}
         onClose={onClose}
         open={open}
       >
         <div>
-          <form onSubmit={handleSubmit} className={styles.form}>
+          <form onSubmit={!productMode || productMode.includes('create') ? handleSubmit : handleEditProduct} className={styles.form}>
             <label className={styles.labelInput}>
               Name of the product
               <Input
@@ -166,7 +226,7 @@ const Drower: FC<IProps> = (props) => {
               </div>
             </div>
             <button type="submit" className={styles.btn_submit} disabled={formData.title == "" || formData.icon==="" || formData.price === ""}>
-              <PlusOutlined /> Add product to the menu!
+              <PlusOutlined /> {!productMode || productMode.includes('create') ? 'Add' : 'Edit'} product to the menu!
             </button>
           </form>
         </div>
